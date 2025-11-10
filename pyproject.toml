@@ -1,0 +1,85 @@
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[project]
+name = "path_embedding"
+description = "Classifier that uses embeddings to find useful paths between drugs and disease"
+authors = [
+  {name = "Justin Reese", email = "justinreese@lbl.gov"},
+]
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dynamic = ["version"]
+
+dependencies = [
+  "typer >= 0.9.0",
+  "linkml-runtime >=1.9.4",
+  "networkx>=3.4.2",
+  "openai>=2.7.1",
+  "numpy>=2.2.6",
+  "scikit-learn>=1.7.2",
+  "pyyaml>=6.0.3",
+  "requests>=2.32.5",
+]
+
+[dependency-groups]
+dev = [
+    "linkml>=1.9.3",
+    "mypy>=1.17.1",
+    "ruff>=0.4.8",
+    "mkdocs-material>=8.2.8",
+    "mkdocs-mermaid2-plugin>=1.1.1",
+    "jupyter>=1.0.0",
+    "mknotebooks>= 0.8.0",
+]
+
+[project.scripts]
+path-embedding = "path_embedding.cli:main"
+
+
+# See https://hatch.pypa.io/latest/config/build/#file-selection for how to
+# explicitly include files other than default into the build distributions.
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+# Ref.: https://github.com/ninoseki/uv-dynamic-versioning/
+[tool.uv-dynamic-versioning]
+vcs = "git"
+style = "pep440"
+fallback-version = "0.0.0"
+
+# Ref.: https://docs.pytest.org/en/stable/reference/reference.html#configuration-options
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+# Ref.: https://github.com/codespell-project/codespell
+[tool.codespell]
+skip = [
+  "LICENSE",
+  "pyproject.toml",
+  "uv.lock",
+  "project/*",
+  "src/path_embedding/datamodel/path_embedding_pydantic.py",
+  "src/path_embedding/datamodel/path_embedding.py",
+]
+
+# Reminder: words have to be lowercased for the ignore-words-list
+ignore-words-list = "linke"
+quiet-level = 3
+
+# Ref.: https://github.com/crate-ci/typos (spell checker)
+[tool.typos.default.extend-words]
+linke = "linke"
+[tool.typos.files]
+extend-exclude = [
+  "LICENSE",
+  "uv.lock",
+  "pyproject.toml",
+  "project/*",
+  "src/path_embedding/datamodel/path_embedding_pydantic.py",
+  "src/path_embedding/datamodel/path_embedding.py",
+]
