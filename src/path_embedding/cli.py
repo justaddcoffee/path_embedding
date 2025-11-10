@@ -4,6 +4,9 @@ import typer
 from typing_extensions import Annotated
 import pickle
 import numpy as np
+import json
+from pathlib import Path
+from datetime import datetime
 
 app = typer.Typer(help="path-embedding: Classifier that uses embeddings to find useful paths between drugs and disease")
 
@@ -16,6 +19,8 @@ def train(
     test_size: Annotated[float, typer.Option(help="Fraction for test set")] = 0.2,
     max_paths_per_indication: Annotated[int, typer.Option(help="Max paths to extract per indication")] = 10,
     random_seed: Annotated[int, typer.Option(help="Random seed")] = 42,
+    save_embeddings: Annotated[bool, typer.Option(help="Save embeddings to disk")] = True,
+    save_metrics: Annotated[bool, typer.Option(help="Save metrics to JSON")] = True,
 ):
     """Train path embedding classifier on DrugMechDB data."""
     from path_embedding.data.drugmechdb import load_drugmechdb
@@ -77,11 +82,71 @@ def train(
     model = train_classifier(train_embeddings, train_labels, random_state=random_seed)
 
     typer.echo("Evaluating on test set...")
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+    predictions = model.predict(test_embeddings)
+    probabilities = model.predict_proba(test_embeddings)[:, 1]
+
+    metrics = {
+        'accuracy': float(accuracy_score(test_labels, predictions)),
+        'precision': float(precision_score(test_labels, predictions)),
+        'recall': float(recall_score(test_labels, predictions)),
+        'f1': float(f1_score(test_labels, predictions)),
+        'roc_auc': float(roc_auc_score(test_labels, probabilities))
+    }
+
     print_evaluation_report(model, test_embeddings, test_labels)
 
+    # Determine output paths based on model output path
+    output_path = Path(output)
+    output_dir = output_path.parent
+    output_stem = output_path.stem
+
+    # Save model
     typer.echo(f"Saving model to {output}...")
     with open(output, 'wb') as f:
         pickle.dump(model, f)
+
+    # Save embeddings if requested
+    if save_embeddings:
+        train_emb_path = output_dir / f"{output_stem}_train_embeddings.npy"
+        test_emb_path = output_dir / f"{output_stem}_test_embeddings.npy"
+        train_labels_path = output_dir / f"{output_stem}_train_labels.npy"
+        test_labels_path = output_dir / f"{output_stem}_test_labels.npy"
+
+        typer.echo(f"Saving embeddings to {output_dir}...")
+        np.save(train_emb_path, train_embeddings)
+        np.save(test_emb_path, test_embeddings)
+        np.save(train_labels_path, train_labels)
+        np.save(test_labels_path, test_labels)
+
+    # Save metrics if requested
+    if save_metrics:
+        metrics_path = output_dir / f"{output_stem}_metrics.json"
+
+        # Add metadata
+        full_metrics = {
+            'timestamp': datetime.now().isoformat(),
+            'config': {
+                'data': data,
+                'test_size': test_size,
+                'max_paths_per_indication': max_paths_per_indication,
+                'random_seed': random_seed,
+                'total_indications': len(indications),
+                'skipped_indications': skipped_count,
+                'train_size': len(train_paths),
+                'test_size': len(test_paths),
+                'train_positive': len(train_pos),
+                'train_negative': len(train_neg),
+                'test_positive': len(test_pos),
+                'test_negative': len(test_neg),
+                'embedding_dim': train_embeddings.shape[1]
+            },
+            'metrics': metrics
+        }
+
+        typer.echo(f"Saving metrics to {metrics_path}...")
+        with open(metrics_path, 'w') as f:
+            json.dump(full_metrics, f, indent=2)
 
     typer.echo("Training complete!")
 
