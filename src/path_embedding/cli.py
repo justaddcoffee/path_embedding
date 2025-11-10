@@ -2,7 +2,6 @@
 
 import typer
 from typing_extensions import Annotated
-from pathlib import Path
 import pickle
 import numpy as np
 
@@ -25,7 +24,7 @@ def train(
     from path_embedding.model.data_split import split_by_indication
     from path_embedding.embedding.openai_embedder import load_api_key, embed_paths
     from path_embedding.model.classifier import train_classifier
-    from path_embedding.model.evaluation import evaluate_classifier, print_evaluation_report
+    from path_embedding.model.evaluation import print_evaluation_report
 
     typer.echo("Loading DrugMechDB data...")
     indications = load_drugmechdb(data)
