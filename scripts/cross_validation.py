@@ -5,7 +5,7 @@ This script performs 5-fold cross-validation to estimate performance with confid
 import sys
 import numpy as np
 from sklearn.model_selection import KFold
-from pathembedding.data.drugmechdb import load_drugmechdb
+from path_embedding.data.drugmechdb import load_drugmechdb
 from path_embedding.utils.path_extraction import build_multigraph, extract_paths
 from path_embedding.data.negative_sampling import generate_negatives
 from path_embedding.embedding.openai_embedder import load_api_key, embed_paths
@@ -50,7 +50,7 @@ def main():
     # Store results
     fold_results = []
 
-    kfold = KFold(n_splits=n_splits, shuffle=True, random_seed=random_seed)
+    kfold = KFold(n_splits=n_splits, shuffle=True, random_state=random_seed)
 
     api_key = load_api_key(api_key_path)
 
