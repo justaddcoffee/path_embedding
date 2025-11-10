@@ -51,7 +51,7 @@ def test_path_to_text_real_example():
 
     indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
     graph = build_multigraph(indications[0])
-    paths = extract_paths(graph, indications[0]["_id"])
+    paths = extract_paths(graph, indications[0]["graph"]["_id"])
 
     text = path_to_text(paths[0])
 

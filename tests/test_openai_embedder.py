@@ -68,7 +68,7 @@ def test_embed_paths():
     paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        indication_paths = extract_paths(graph, indication["_id"], max_paths=1)
+        indication_paths = extract_paths(graph, indication["graph"]["_id"], max_paths=1)
         paths.extend(indication_paths)
 
     embeddings = embed_paths(paths, key)
@@ -90,7 +90,7 @@ def test_embed_paths_integration():
 
     indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
     graph = build_multigraph(indications[0])
-    paths = extract_paths(graph, indications[0]["_id"])
+    paths = extract_paths(graph, indications[0]["graph"]["_id"])
 
     embeddings = embed_paths(paths, key)
 

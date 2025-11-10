@@ -8,15 +8,15 @@ def test_load_drugmechdb():
     >>> indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
     >>> len(indications)
     2
-    >>> indications[0]["_id"]
+    >>> indications[0]["graph"]["_id"]
     'DB00619_MESH_D015464_1'
     """
     test_file = "tests/data/sample_drugmechdb.yaml"
     indications = load_drugmechdb(test_file)
 
     assert len(indications) == 2
-    assert indications[0]["_id"] == "DB00619_MESH_D015464_1"
-    assert indications[1]["_id"] == "DB00316_MESH_D010146_1"
+    assert indications[0]["graph"]["_id"] == "DB00619_MESH_D015464_1"
+    assert indications[1]["graph"]["_id"] == "DB00316_MESH_D010146_1"
 
 
 def test_load_drugmechdb_structure():

@@ -32,11 +32,17 @@ def train(
 
     typer.echo("Extracting paths from multigraphs...")
     all_positive_paths = []
+    skipped_count = 0
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"], max_paths=max_paths_per_indication)
-        all_positive_paths.extend(paths)
-    typer.echo(f"Extracted {len(all_positive_paths)} positive paths")
+        try:
+            paths = extract_paths(graph, indication["graph"]["_id"], max_paths=max_paths_per_indication)
+            all_positive_paths.extend(paths)
+        except ValueError as e:
+            # Skip indications with invalid/incomplete graphs
+            skipped_count += 1
+            typer.echo(f"Warning: Skipping indication {indication['graph']['_id']}: {e}", err=True)
+    typer.echo(f"Extracted {len(all_positive_paths)} positive paths (skipped {skipped_count} invalid indications)")
 
     typer.echo("Generating negative examples...")
     negative_paths = generate_negatives(all_positive_paths)

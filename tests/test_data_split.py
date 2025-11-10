@@ -25,7 +25,7 @@ def test_split_by_indication():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     train_paths, test_paths = split_by_indication(
@@ -49,7 +49,7 @@ def test_split_by_indication_no_leakage():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     train_paths, test_paths = split_by_indication(
@@ -73,7 +73,7 @@ def test_split_by_indication_reproducible():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     train1, test1 = split_by_indication(all_paths, test_size=0.5, random_seed=42)

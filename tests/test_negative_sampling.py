@@ -30,7 +30,7 @@ def test_build_node_inventory():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     inventory = build_node_inventory(all_paths)
@@ -50,7 +50,7 @@ def test_build_node_inventory_structure():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     inventory = build_node_inventory(all_paths)
@@ -71,7 +71,7 @@ def test_build_node_inventory_excludes_drug_disease():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     inventory = build_node_inventory(all_paths)
@@ -110,7 +110,7 @@ def test_generate_negative_path():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     inventory = build_node_inventory(all_paths)
@@ -138,7 +138,7 @@ def test_generate_negative_path_preserves_types():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     inventory = build_node_inventory(all_paths)
@@ -165,7 +165,7 @@ def test_generate_negative_path_different_disease_context():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     inventory = build_node_inventory(all_paths)
@@ -210,7 +210,7 @@ def test_generate_negatives():
     all_paths = []
     for indication in indications:
         graph = build_multigraph(indication)
-        paths = extract_paths(graph, indication["_id"])
+        paths = extract_paths(graph, indication["graph"]["_id"])
         all_paths.extend(paths)
 
     negatives = generate_negatives(all_paths)

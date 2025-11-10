@@ -100,7 +100,7 @@ def test_extract_paths_simple():
     indication = indications[0]
     graph = build_multigraph(indication)
 
-    paths = extract_paths(graph, indication["_id"])
+    paths = extract_paths(graph, indication["graph"]["_id"])
 
     assert len(paths) == 1
     assert isinstance(paths[0], Path)
@@ -112,7 +112,7 @@ def test_extract_paths_structure():
     indication = indications[0]
     graph = build_multigraph(indication)
 
-    paths = extract_paths(graph, indication["_id"])
+    paths = extract_paths(graph, indication["graph"]["_id"])
     path = paths[0]
 
     # Should have 3 nodes: Drug -> Protein -> Disease
@@ -137,7 +137,7 @@ def test_extract_paths_multiple():
     indication = indications[1]  # Second example has longer path
     graph = build_multigraph(indication)
 
-    paths = extract_paths(graph, indication["_id"])
+    paths = extract_paths(graph, indication["graph"]["_id"])
 
     # Should extract at least one path
     assert len(paths) >= 1
@@ -155,6 +155,6 @@ def test_extract_paths_max_limit():
     graph = build_multigraph(indication)
 
     # Extract with limit
-    paths = extract_paths(graph, indication["_id"], max_paths=1)
+    paths = extract_paths(graph, indication["graph"]["_id"], max_paths=1)
 
     assert len(paths) <= 1

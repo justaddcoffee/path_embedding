@@ -57,14 +57,16 @@ def embed_text(text: str, api_key: str, model: str = "text-embedding-3-small") -
 def embed_paths(
     paths: List[Path],
     api_key: str,
-    model: str = "text-embedding-3-small"
+    model: str = "text-embedding-3-small",
+    batch_size: int = 2048
 ) -> np.ndarray:
-    """Generate embeddings for multiple paths.
+    """Generate embeddings for multiple paths using batched API calls.
 
     Args:
         paths: List of Path objects
         api_key: OpenAI API key
         model: OpenAI embedding model
+        batch_size: Number of texts to embed per API call (max 2048)
 
     Returns:
         2D numpy array of shape (n_paths, embedding_dim)
@@ -87,15 +89,30 @@ def embed_paths(
         >>> embs.shape[0] == 1
         True
     """
+    import sys
+
+    # Convert all paths to text
+    texts = [path_to_text(path) for path in paths]
+
+    client = OpenAI(api_key=api_key)
     embeddings = []
 
-    for path in paths:
-        # Convert path to text
-        text = path_to_text(path)
+    # Process in batches
+    total_batches = (len(texts) + batch_size - 1) // batch_size
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i + batch_size]
+        batch_num = i // batch_size + 1
 
-        # Generate embedding
-        embedding = embed_text(text, api_key, model)
-        embeddings.append(embedding)
+        print(f"Processing batch {batch_num}/{total_batches} ({len(batch)} paths)...", file=sys.stderr)
+
+        response = client.embeddings.create(
+            input=batch,
+            model=model
+        )
+
+        # Extract embeddings in order
+        batch_embeddings = [np.array(item.embedding) for item in response.data]
+        embeddings.extend(batch_embeddings)
 
     # Stack into 2D array
     return np.vstack(embeddings)
