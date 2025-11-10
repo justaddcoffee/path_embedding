@@ -1,19 +1,27 @@
 """Tests for OpenAI embedding generation."""
+import os
 import numpy as np
+import pytest
 from path_embedding.embedding.openai_embedder import load_api_key, embed_text
+
+# Skip all tests in this module if API key file doesn't exist
+API_KEY_PATH = os.environ.get("OPENAI_API_KEY_PATH", "/Users/jtr4v/openai.key.another")
+pytestmark = pytest.mark.skipif(
+    not os.path.exists(API_KEY_PATH),
+    reason="API key file not found - skipping OpenAI API tests"
+)
 
 
 def test_load_api_key():
     """Test loading API key from file.
 
-    >>> key = load_api_key("/Users/jtr4v/openai.key.another")
-    >>> len(key) > 0
+    >>> key = load_api_key("/Users/jtr4v/openai.key.another")  # doctest: +SKIP
+    >>> len(key) > 0  # doctest: +SKIP
     True
-    >>> key.startswith("sk-")
+    >>> key.startswith("sk-")  # doctest: +SKIP
     True
     """
-    key_path = "/Users/jtr4v/openai.key.another"
-    key = load_api_key(key_path)
+    key = load_api_key(API_KEY_PATH)
 
     assert isinstance(key, str)
     assert len(key) > 0
@@ -26,7 +34,7 @@ def test_embed_text():
 
     Note: This test makes real API call and may be slow.
     """
-    key = load_api_key("/Users/jtr4v/openai.key.another")
+    key = load_api_key(API_KEY_PATH)
     text = "Drug: aspirin | inhibits | Protein: COX2"
 
     embedding = embed_text(text, key)
@@ -40,7 +48,7 @@ def test_embed_text():
 
 def test_embed_text_different_inputs():
     """Test that different texts produce different embeddings."""
-    key = load_api_key("/Users/jtr4v/openai.key.another")
+    key = load_api_key(API_KEY_PATH)
 
     text1 = "Drug: aspirin | inhibits | Protein: COX2"
     text2 = "Drug: imatinib | decreases activity of | Protein: BCR/ABL"
@@ -61,7 +69,7 @@ def test_embed_paths():
     from path_embedding.data.drugmechdb import load_drugmechdb
     from path_embedding.utils.path_extraction import build_multigraph, extract_paths
 
-    key = load_api_key("/Users/jtr4v/openai.key.another")
+    key = load_api_key(API_KEY_PATH)
 
     # Load sample paths
     indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
@@ -86,7 +94,7 @@ def test_embed_paths_integration():
     from path_embedding.data.drugmechdb import load_drugmechdb
     from path_embedding.utils.path_extraction import build_multigraph, extract_paths
 
-    key = load_api_key("/Users/jtr4v/openai.key.another")
+    key = load_api_key(API_KEY_PATH)
 
     indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
     graph = build_multigraph(indications[0])
