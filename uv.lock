@@ -2064,6 +2064,7 @@ dependencies = [
     { name = "requests" },
     { name = "scikit-learn" },
     { name = "typer" },
+    { name = "types-networkx" },
 ]
 
 [package.dev-dependencies]
@@ -2088,6 +2089,7 @@ requires-dist = [
     { name = "requests", specifier = ">=2.32.5" },
     { name = "scikit-learn", specifier = ">=1.7.2" },
     { name = "typer", specifier = ">=0.9.0" },
+    { name = "types-networkx", specifier = ">=3.5.0.20251106" },
 ]
 
 [package.metadata.requires-dev]
@@ -3566,6 +3568,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8f/28/7c85c8032b91dbe79725b6f17d2fffc595dff06a35c7a30a37bef73a1ab4/typer-0.20.0.tar.gz", hash = "sha256:1aaf6494031793e4876fb0bacfa6a912b551cf43c1e63c800df8b1a866720c37", size = 106492, upload-time = "2025-10-20T17:03:49.445Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/78/64/7713ffe4b5983314e9d436a90d5bd4f63b6054e2aca783a3cfc44cb95bbf/typer-0.20.0-py3-none-any.whl", hash = "sha256:5b463df6793ec1dca6213a3cf4c0f03bc6e322ac5e16e13ddd622a889489784a", size = 47028, upload-time = "2025-10-20T17:03:47.617Z" },
+]
+
+[[package]]
+name = "types-networkx"
+version = "3.5.0.20251106"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "numpy", version = "2.3.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/da/0d/0657390fb7e4fffb9e0a20d51b9b63451771c238ad7ca2eb31de12827a87/types_networkx-3.5.0.20251106.tar.gz", hash = "sha256:2f17a53a35cf6dbbb031039c19bf0f127ec1b37f3530c57a517a0dd67a42e343", size = 72307, upload-time = "2025-11-06T03:06:52.263Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/43/01/f768e7d3662841a5163f261510148a89564ffc4320568dfb98b79f8f6e68/types_networkx-3.5.0.20251106-py3-none-any.whl", hash = "sha256:674c53111d5ca6cf96eb6ccd3152d0d52c2720b8ddea8082c7b0116a21347a30", size = 160776, upload-time = "2025-11-06T03:06:50.89Z" },
 ]
 
 [[package]]

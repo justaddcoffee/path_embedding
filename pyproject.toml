@@ -23,6 +23,7 @@ dependencies = [
   "scikit-learn>=1.7.2",
   "pyyaml>=6.0.3",
   "requests>=2.32.5",
+  "types-networkx>=3.5.0.20251106",
 ]
 
 [dependency-groups]
