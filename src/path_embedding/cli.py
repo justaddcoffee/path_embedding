@@ -44,13 +44,14 @@ def train(
             typer.echo(f"Warning: Skipping indication {indication['graph']['_id']}: {e}", err=True)
     typer.echo(f"Extracted {len(all_positive_paths)} positive paths (skipped {skipped_count} invalid indications)")
 
-    typer.echo("Generating negative examples...")
-    negative_paths = generate_negatives(all_positive_paths)
-    typer.echo(f"Generated {len(negative_paths)} negative paths")
-
     typer.echo("Splitting train/test by indication...")
     train_pos, test_pos = split_by_indication(all_positive_paths, test_size=test_size, random_seed=random_seed)
-    train_neg, test_neg = split_by_indication(negative_paths, test_size=test_size, random_seed=random_seed)
+    typer.echo(f"Split: {len(train_pos)} train positive, {len(test_pos)} test positive")
+
+    typer.echo("Generating negative examples (train and test separately to avoid leakage)...")
+    train_neg = generate_negatives(train_pos)
+    test_neg = generate_negatives(test_pos)
+    typer.echo(f"Generated {len(train_neg)} train negatives, {len(test_neg)} test negatives")
 
     train_paths = train_pos + train_neg
     test_paths = test_pos + test_neg
