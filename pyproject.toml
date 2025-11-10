@@ -24,6 +24,10 @@ dependencies = [
   "pyyaml>=6.0.3",
   "requests>=2.32.5",
   "types-networkx>=3.5.0.20251106",
+  "pandas>=2.3.3",
+  "matplotlib>=3.10.7",
+  "seaborn>=0.13.2",
+  "jupyter>=1.1.1",
 ]
 
 [dependency-groups]
