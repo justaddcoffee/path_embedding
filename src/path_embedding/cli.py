@@ -128,7 +128,7 @@ def train(
             'timestamp': datetime.now().isoformat(),
             'config': {
                 'data': data,
-                'test_size': test_size,
+                'test_split_ratio': test_size,
                 'max_paths_per_indication': max_paths_per_indication,
                 'random_seed': random_seed,
                 'total_indications': len(indications),
