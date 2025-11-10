@@ -1,6 +1,8 @@
 """Path extraction from NetworkX multigraphs."""
-from typing import Dict, Any, Tuple
+from typing import Dict, Any, Tuple, List
 import networkx as nx
+import random
+from path_embedding.datamodel.types import Node, Edge, Path
 
 
 def build_multigraph(indication: Dict[str, Any]) -> nx.MultiDiGraph:
@@ -81,3 +83,78 @@ def find_drug_disease_nodes(graph: nx.MultiDiGraph) -> Tuple[str, str]:
         raise ValueError("No Disease node found in graph")
 
     return drug_id, disease_id
+
+
+def extract_paths(
+    graph: nx.MultiDiGraph,
+    indication_id: str,
+    max_paths: int = 10
+) -> List[Path]:
+    """Extract all simple paths from drug to disease in multigraph.
+
+    Args:
+        graph: NetworkX MultiDiGraph
+        indication_id: Original DrugMechDB indication ID
+        max_paths: Maximum number of paths to extract (randomly sample if more)
+
+    Returns:
+        List of Path objects
+
+    Example:
+        >>> from path_embedding.data.drugmechdb import load_drugmechdb
+        >>> indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
+        >>> graph = build_multigraph(indications[0])
+        >>> paths = extract_paths(graph, indications[0]["_id"])
+        >>> len(paths) >= 1
+        True
+    """
+    # Find drug and disease nodes
+    drug_id, disease_id = find_drug_disease_nodes(graph)
+
+    # Extract all simple paths
+    all_node_paths = list(nx.all_simple_paths(graph, drug_id, disease_id))
+
+    # Sample if too many paths
+    if len(all_node_paths) > max_paths:
+        all_node_paths = random.sample(all_node_paths, max_paths)
+
+    # Convert to Path objects
+    paths = []
+    for node_path in all_node_paths:
+        # Build nodes list
+        nodes = []
+        for node_id in node_path:
+            node_data = graph.nodes[node_id]
+            nodes.append(Node(
+                id=node_id,
+                label=node_data["label"],
+                name=node_data["name"]
+            ))
+
+        # Build edges list
+        edges = []
+        for i in range(len(node_path) - 1):
+            source = node_path[i]
+            target = node_path[i + 1]
+
+            # Get edge data (handle multigraph - may have multiple edges)
+            edge_data = graph.get_edge_data(source, target)
+            # Take first edge if multiple exist
+            edge_key = list(edge_data.keys())[0]
+            edge_attrs = edge_data[edge_key]
+
+            edges.append(Edge(
+                key=edge_attrs["key"],
+                source=source,
+                target=target
+            ))
+
+        paths.append(Path(
+            nodes=nodes,
+            edges=edges,
+            drug_id=drug_id,
+            disease_id=disease_id,
+            indication_id=indication_id
+        ))
+
+    return paths
