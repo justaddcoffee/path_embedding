@@ -3,9 +3,12 @@ from path_embedding.data.negative_sampling import (
     build_node_inventory,
     generate_negative_path,
     generate_negatives,
+    generate_hard_negative_path,
+    generate_hard_negatives,
 )
 from path_embedding.data.drugmechdb import load_drugmechdb
 from path_embedding.utils.path_extraction import build_multigraph, extract_paths
+from path_embedding.embedding.text_formatter import path_to_text
 import random
 
 
@@ -225,3 +228,139 @@ def test_generate_negatives():
         assert len(neg.nodes) > 0
         assert neg.nodes[0].label == "Drug"
         assert neg.nodes[-1].label == "Disease"
+
+
+def test_generate_hard_negative_path_single_node_difference():
+    """Test that hard negative differs by exactly one intermediate node."""
+    random.seed(42)
+
+    indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
+    all_paths = []
+    for indication in indications:
+        graph = build_multigraph(indication)
+        paths = extract_paths(graph, indication["graph"]["_id"])
+        all_paths.extend(paths)
+
+    inventory = build_node_inventory(all_paths)
+    all_positive_texts = {path_to_text(path) for path in all_paths}
+
+    # Find a path with intermediate nodes
+    positive_path = None
+    for path in all_paths:
+        intermediate_count = sum(
+            1 for node in path.nodes if node.label not in ["Drug", "Disease"]
+        )
+        if intermediate_count > 0:
+            positive_path = path
+            break
+
+    assert positive_path is not None, "Need path with intermediate nodes"
+
+    hard_negative = generate_hard_negative_path(
+        positive_path, inventory, all_positive_texts
+    )
+
+    # Count differences in intermediate nodes
+    differences = 0
+    for i in range(len(positive_path.nodes)):
+        pos_node = positive_path.nodes[i]
+        neg_node = hard_negative.nodes[i]
+
+        # Drug and Disease should be same
+        if pos_node.label in ["Drug", "Disease"]:
+            assert pos_node.id == neg_node.id
+        else:
+            # Count if different
+            if pos_node.id != neg_node.id:
+                differences += 1
+                # Should preserve node type
+                assert pos_node.label == neg_node.label
+
+    # Should have at least one difference (could be more if fallback triggered)
+    assert differences >= 1
+
+
+def test_generate_hard_negative_path_no_collision():
+    """Test that hard negatives don't collide with existing positives."""
+    random.seed(42)
+
+    indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
+    all_paths = []
+    for indication in indications:
+        graph = build_multigraph(indication)
+        paths = extract_paths(graph, indication["graph"]["_id"])
+        all_paths.extend(paths)
+
+    inventory = build_node_inventory(all_paths)
+    all_positive_texts = {path_to_text(path) for path in all_paths}
+
+    # Generate hard negatives for all paths
+    for positive_path in all_paths[:10]:  # Test first 10 to keep it fast
+        hard_negative = generate_hard_negative_path(
+            positive_path, inventory, all_positive_texts
+        )
+
+        # Hard negative should not match any positive
+        hard_neg_text = path_to_text(hard_negative)
+        assert hard_neg_text not in all_positive_texts
+
+
+def test_generate_hard_negative_path_preserves_structure():
+    """Test that hard negative preserves path structure."""
+    random.seed(42)
+
+    indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
+    all_paths = []
+    for indication in indications:
+        graph = build_multigraph(indication)
+        paths = extract_paths(graph, indication["graph"]["_id"])
+        all_paths.extend(paths)
+
+    inventory = build_node_inventory(all_paths)
+    all_positive_texts = {path_to_text(path) for path in all_paths}
+    positive_path = all_paths[0]
+
+    hard_negative = generate_hard_negative_path(
+        positive_path, inventory, all_positive_texts
+    )
+
+    # Should preserve structure
+    assert len(hard_negative.nodes) == len(positive_path.nodes)
+    assert len(hard_negative.edges) == len(positive_path.edges)
+    assert hard_negative.drug_id == positive_path.drug_id
+    assert hard_negative.disease_id == positive_path.disease_id
+
+    # Should preserve node types in order
+    for i in range(len(positive_path.nodes)):
+        assert positive_path.nodes[i].label == hard_negative.nodes[i].label
+
+
+def test_generate_hard_negatives():
+    """Test generating hard negative dataset."""
+    random.seed(42)
+
+    indications = load_drugmechdb("tests/data/sample_drugmechdb.yaml")
+    all_paths = []
+    for indication in indications:
+        graph = build_multigraph(indication)
+        paths = extract_paths(graph, indication["graph"]["_id"])
+        all_paths.extend(paths)
+
+    hard_negatives = generate_hard_negatives(all_paths)
+
+    # Should have 1:1 ratio
+    assert len(hard_negatives) == len(all_paths)
+
+    # Each negative should be valid Path
+    for neg in hard_negatives:
+        from path_embedding.datamodel.types import Path
+        assert isinstance(neg, Path)
+        assert len(neg.nodes) > 0
+        assert neg.nodes[0].label == "Drug"
+        assert neg.nodes[-1].label == "Disease"
+
+    # Hard negatives should not match positives
+    all_positive_texts = {path_to_text(path) for path in all_paths}
+    for hard_neg in hard_negatives:
+        hard_neg_text = path_to_text(hard_neg)
+        assert hard_neg_text not in all_positive_texts
