@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://justaddcoffee.github.io/path-embedding/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://justaddcoffee.github.io/path-embedding/about/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://justaddcoffee.github.io/path-embedding/usage/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://justaddcoffee.github.io/path-embedding/plans/2025-11-10-path-embedding-classifier-design/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://justaddcoffee.github.io/path-embedding/plans/2025-11-10-path-embedding-implementation/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://justaddcoffee.github.io/path-embedding/plans/2025-11-11-hard-negatives-design/</loc>
+         <lastmod>2025-11-12</lastmod>
+    </url>
+</urlset>
