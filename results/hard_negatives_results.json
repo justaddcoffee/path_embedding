@@ -1,0 +1,48 @@
+{
+  "standard_negatives": {
+    "accuracy": 0.8775510204081632,
+    "precision": 0.9221767115272089,
+    "recall": 0.8246991104133962,
+    "f1": 0.8707182320441988,
+    "roc_auc": 0.9589166906951163
+  },
+  "hard_negatives": {
+    "accuracy": 0.6763474620617478,
+    "precision": 0.7353351955307262,
+    "recall": 0.5510204081632653,
+    "f1": 0.6299730780735866,
+    "roc_auc": 0.7500559294683538
+  },
+  "comparison": {
+    "Standard Negatives": {
+      "accuracy": 0.8775510204081632,
+      "precision": 0.9221767115272089,
+      "recall": 0.8246991104133962,
+      "f1": 0.8707182320441988,
+      "roc_auc": 0.9589166906951163
+    },
+    "Hard Negatives": {
+      "accuracy": 0.6763474620617478,
+      "precision": 0.7353351955307262,
+      "recall": 0.5510204081632653,
+      "f1": 0.6299730780735866,
+      "roc_auc": 0.7500559294683538
+    },
+    "Difference": {
+      "accuracy": 0.20120355834641546,
+      "precision": 0.1868415159964827,
+      "recall": 0.2736787022501309,
+      "f1": 0.24074515397061225,
+      "roc_auc": 0.20886076122676256
+    }
+  },
+  "config": {
+    "data_path": "data/indication_paths.yaml",
+    "max_paths_per_indication": 10,
+    "test_size": 0.2,
+    "random_seed": 42,
+    "total_positive_paths": 9528,
+    "train_positive": 7617,
+    "test_positive": 1911
+  }
+}
