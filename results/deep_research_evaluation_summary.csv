@@ -1,10 +1,10 @@
-Tier,Rank,RF_Score,Drug,Disease,AI_Score,AI_Rating,Report_File,Report_URL
-Top,1,0.665,Sorafenib,liver carcinoma,5,Totally plausible (mechanism already described),top_01_rank0001_Sorafenib_liver_carcinoma.md,https://github.com/justaddcoffee/path_embedding/blob/main/results/deep_research/top_01_rank0001_Sorafenib_liver_carcinoma.md
-Top,4,0.645,Olaparib,ovarian cancer,5,Totally plausible (mechanism already described),top_02_rank0004_Olaparib_ovarian_cancer.md,https://github.com/justaddcoffee/path_embedding/blob/main/results/deep_research/top_02_rank0004_Olaparib_ovarian_cancer.md
-Top,16,0.624,Warfarin,cancer,4,Very plausible (some literature support),top_03_rank0016_Warfarin_cancer.md,https://github.com/justaddcoffee/path_embedding/blob/main/results/deep_research/top_03_rank0016_Warfarin_cancer.md
-Top,19,0.617,Icosapent,atherosclerosis,4,Very plausible (some literature support),top_04_rank0019_Icosapent_atherosclerosis.md,https://github.com/justaddcoffee/path_embedding/blob/main/results/deep_research/top_04_rank0019_Icosapent_atherosclerosis.md
-Top,73,0.58,Sildenafil,Alzheimer disease,4,Very plausible (some literature support),top_05_rank0073_Sildenafil_Alzheimer_disease.md,https://github.com/justaddcoffee/path_embedding/blob/main/results/deep_research/top_05_rank0073_Sildenafil_Alzheimer_disease.md
-Bottom,9999,0.213,Imatinib,asthma,4,Very plausible (some literature support),bottom_01_rank9999_Imatinib_asthma.md,https://github.com/justaddcoffee/path_embedding/blob/main/results/deep_research/bottom_01_rank9999_Imatinib_asthma.md
-Bottom,9986,0.243,Naltrexone,Hailey-Hailey disease,4,Very plausible (some literature support),bottom_02_rank9986_Naltrexone_Hailey-Hailey_disease.md,https://github.com/justaddcoffee/path_embedding/blob/main/results/deep_research/bottom_02_rank9986_Naltrexone_Hailey-Hailey_disease.md
-Bottom,9952,0.26,Fluoxetine,long COVID-19,4,Very plausible (some literature support),bottom_03_rank9952_Fluoxetine_long_COVID-19.md,https://github.com/justaddcoffee/path_embedding/blob/main/results/deep_research/bottom_03_rank9952_Fluoxetine_long_COVID-19.md
-Bottom,9295,0.325,acetylsalicylate,colorectal cancer,4,Very plausible (some literature support),bottom_05_rank9295_acetylsalicylate_colorectal_cancer.md,https://github.com/justaddcoffee/path_embedding/blob/main/results/deep_research/bottom_05_rank9295_acetylsalicylate_colorectal_cancer.md
+Tier,Rank,RF Score,Drug,Disease,AI Score,AI Rating,Report
+Top,1,0.665,Sorafenib,liver carcinoma,5,Totally plausible,results/deep_research/top_01_rank0001_Sorafenib_liver_carcinoma.md
+Top,4,0.645,Olaparib,ovarian cancer,5,Totally plausible,results/deep_research/top_02_rank0004_Olaparib_ovarian_cancer.md
+Top,16,0.624,Warfarin,cancer,4,Very plausible,results/deep_research/top_03_rank0016_Warfarin_cancer.md
+Top,19,0.617,Icosapent,atherosclerosis,4,Very plausible,results/deep_research/top_04_rank0019_Icosapent_atherosclerosis.md
+Top,73,0.58,Sildenafil,Alzheimer disease,4,Very plausible,results/deep_research/top_05_rank0073_Sildenafil_Alzheimer_disease.md
+Bottom,9999,0.213,Imatinib,asthma,4,Very plausible,results/deep_research/bottom_01_rank9999_Imatinib_asthma.md
+Bottom,9986,0.243,Naltrexone,Hailey-Hailey disease,4,Very plausible,results/deep_research/bottom_02_rank9986_Naltrexone_Hailey-Hailey_disease.md
+Bottom,9952,0.26,Fluoxetine,long COVID-19,4,Very plausible,results/deep_research/bottom_03_rank9952_Fluoxetine_long_COVID-19.md
+Bottom,9295,0.325,acetylsalicylate,colorectal cancer,4,Very plausible,results/deep_research/bottom_05_rank9295_acetylsalicylate_colorectal_cancer.md
